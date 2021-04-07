@@ -8,11 +8,26 @@ import (
 	"os"
 )
 
+const (
+	DefaultLogMaxSize = 2
+	DefaultLogMaxAge  = 30
+)
+
 func NewLog(config config.LogConfig) *L {
 	l := new(L)
 	l.initFileLogger(config)
 	l.initConsoleEntry(config)
 	return l
+}
+
+func NewLogDefault(level logrus.Level, logName string) *L {
+	defaultConfig := config.LogConfig{
+		Level:    level,
+		Filename: logName,
+		MaxSize:  DefaultLogMaxSize,
+		MaxAge:   DefaultLogMaxAge,
+	}
+	return NewLog(defaultConfig)
 }
 
 /**
