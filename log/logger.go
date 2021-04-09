@@ -1,15 +1,17 @@
 package log
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/lvxin0315/gg-framework/config"
 	"github.com/natefinch/lumberjack"
 	"github.com/sirupsen/logrus"
 	"os"
+	"runtime/debug"
 )
 
 const (
-	DefaultLogMaxSize = 2
+	DefaultLogMaxSize = 5
 	DefaultLogMaxAge  = 30
 )
 
@@ -99,22 +101,13 @@ func (l *L) Warning(args ...interface{}) {
 func (l *L) Error(args ...interface{}) {
 	l.consoleEntry.Error(args...)
 	l.fileEntry.Error(args...)
+	l._debugInfo()
 }
 
 func (l *L) Fatal(args ...interface{}) {
 	l.consoleEntry.Fatal(args...)
 	l.fileEntry.Fatal(args...)
 }
-
-func (l *L) Panic(args ...interface{}) {
-	defer func() {
-
-	}()
-	l.consoleEntry.Panic(args...)
-	l.fileEntry.Panic(args...)
-}
-
-// Entry Printf family functions
 
 func (l *L) Tracef(format string, args ...interface{}) {
 	l.consoleEntry.Trace(fmt.Sprintf(format, args...))
@@ -149,6 +142,7 @@ func (l *L) Warningf(format string, args ...interface{}) {
 func (l *L) Errorf(format string, args ...interface{}) {
 	l.consoleEntry.Error(fmt.Sprintf(format, args...))
 	l.fileEntry.Error(fmt.Sprintf(format, args...))
+	l._debugInfo()
 }
 
 func (l *L) Fatalf(format string, args ...interface{}) {
@@ -159,4 +153,19 @@ func (l *L) Fatalf(format string, args ...interface{}) {
 func (l *L) Panicf(format string, args ...interface{}) {
 	l.consoleEntry.Panic(fmt.Sprintf(format, args...))
 	l.fileEntry.Panic(fmt.Sprintf(format, args...))
+}
+
+/**
+ * @Author lvxin0315@163.com
+ * @Description 显示debug信息
+ * @Date 4:46 下午 2021/4/9
+ * @Param
+ * @return
+ **/
+func (l *L) _debugInfo() {
+	debug.PrintStack()
+	// 分行显示
+	for _, stack := range bytes.Split(debug.Stack(), []byte("\n")) {
+		l.fileEntry.Error(string(bytes.ReplaceAll(stack, []byte("\t"), []byte(" "))))
+	}
 }

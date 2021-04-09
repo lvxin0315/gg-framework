@@ -15,5 +15,11 @@ func TestLog(t *testing.T) {
 		MaxAge:   30,
 	}
 	l := log.NewLog(logConfig)
-	l.Info("hi,", " wl")
+	_test(l)
+	l.Info("hi,", " wl Info")
+
+}
+
+func _test(l *log.L) {
+	l.Error("hi,", " wl Error")
 }
