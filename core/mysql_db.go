@@ -16,7 +16,19 @@ type FuncWithDB func(gormDB *gorm.DB) error
  * @Param
  * @return
  **/
-func MysqlDB(config *config.MysqlConfig, fs ...FuncWithDB) error {
+type MysqlDB struct {
+	config *config.MysqlConfig
+	gormDB *gorm.DB
+}
+
+func NewMysqlDB(config *config.MysqlConfig) *MysqlDB {
+	mysqlDB := new(MysqlDB)
+	mysqlDB.init(config)
+	return mysqlDB
+}
+
+func (mysqlDB *MysqlDB) init(config *config.MysqlConfig) {
+	mysqlDB.config = config
 	gormDB, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
 		config.User,
 		config.Password,
@@ -25,12 +37,19 @@ func MysqlDB(config *config.MysqlConfig, fs ...FuncWithDB) error {
 		config.Database,
 		config.Charset))
 	if err != nil {
-		return err
+		panic(err)
 	}
-	gormDB.LogMode(config.Debug)
+	fmt.Println(gormDB)
+	mysqlDB.gormDB = gormDB
+	mysqlDB.gormDB.LogMode(config.Debug)
+
+}
+
+func (mysqlDB *MysqlDB) Exec(fs ...FuncWithDB) error {
+	gormDB := mysqlDB.gormDB.New()
 	defer gormDB.Close()
 	for _, f := range fs {
-		err = f(gormDB)
+		err := f(gormDB)
 		if err != nil {
 			return err
 		}
