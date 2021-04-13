@@ -8,6 +8,7 @@
 - 便捷的配置文件 _by lvxin0315_
 - 文件+console，可分片的log _by lvxin0315_
 - 基于gorm，使用回调函数方式的Mysql便捷操作 _by lvxin0315_
+- 基于gorm，使用回调函数方式的Sqlite便捷操作 _by lvxin0315_
 - 捕获error的封装
 - 协程池化封装
 - 支持多种操作的cache
