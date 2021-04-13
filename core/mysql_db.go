@@ -7,7 +7,7 @@ import (
 	"github.com/lvxin0315/gg-framework/config"
 )
 
-type FuncWithDB func(gormDB *gorm.DB) error
+type FuncWithMysqlGormDB func(gormDB *gorm.DB) error
 
 /**
  * @Author lvxin0315@163.com
@@ -39,15 +39,21 @@ func (mysqlDB *MysqlDB) init(config *config.MysqlConfig) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(gormDB)
+	//gormDB.DB().SetMaxIdleConns(5)
+	//gormDB.DB().SetMaxOpenConns(10)
 	mysqlDB.gormDB = gormDB
 	mysqlDB.gormDB.LogMode(config.Debug)
-
 }
 
-func (mysqlDB *MysqlDB) Exec(fs ...FuncWithDB) error {
+/**
+ * @Author lvxin0315@163.com
+ * @Description 执行操作
+ * @Date 4:49 下午 2021/4/13
+ * @Param
+ * @return
+ **/
+func (mysqlDB *MysqlDB) Exec(fs ...FuncWithMysqlGormDB) error {
 	gormDB := mysqlDB.gormDB.New()
-	defer gormDB.Close()
 	for _, f := range fs {
 		err := f(gormDB)
 		if err != nil {
