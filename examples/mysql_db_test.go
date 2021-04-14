@@ -5,11 +5,12 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/lvxin0315/gg-framework/config"
 	"github.com/lvxin0315/gg-framework/core"
+	"github.com/lvxin0315/gg-framework/model"
 	"testing"
 )
 
 type TestMysqlModel struct {
-	gorm.Model
+	model.GormWithUUID
 	Name string
 	Age  int
 }
