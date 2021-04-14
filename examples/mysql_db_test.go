@@ -10,6 +10,7 @@ import (
 )
 
 type TestMysqlModel struct {
+	gorm.Model
 	model.GormWithUUID
 	Name string
 	Age  int

@@ -3,7 +3,6 @@ package model
 import (
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
-	"time"
 )
 
 /**
@@ -14,11 +13,7 @@ import (
  * @return
  **/
 type GormWithUUID struct {
-	ID        uint `gorm:"primary_key"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time `sql:"index"`
-	UUID      string     `gorm:"column:uuid;type:varchar(255);not null"`
+	UUID string `gorm:"column:uuid;type:varchar(255);not null"`
 }
 
 func (m *GormWithUUID) BeforeCreate(tx *gorm.DB) (err error) {
