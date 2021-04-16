@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/lvxin0315/gg-framework/config"
+	"github.com/lvxin0315/gg-framework/log"
 )
 
 type FuncWithMysqlGormDB func(gormDB *gorm.DB) error
@@ -21,9 +22,13 @@ type MysqlDB struct {
 	gormDB *gorm.DB
 }
 
-func NewMysqlDB(config *config.MysqlConfig) *MysqlDB {
+func NewMysqlDB(config *config.MysqlConfig, logger *log.L) *MysqlDB {
 	mysqlDB := new(MysqlDB)
 	mysqlDB.init(config)
+	//设置log
+	if logger != nil {
+		mysqlDB.gormDB.SetLogger(logger)
+	}
 	return mysqlDB
 }
 

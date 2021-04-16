@@ -23,7 +23,7 @@ func TestNewSqliteDB(t *testing.T) {
 		DBFile: "test.db",
 		Debug:  true,
 	}
-	sqliteDB := core.NewSqliteDB(&config)
+	sqliteDB := core.NewSqliteDB(&config, nil)
 
 	_ = sqliteDB.Exec(func(gormDB *gorm.DB) error {
 		gormDB.AutoMigrate(TestSqliteModel{})

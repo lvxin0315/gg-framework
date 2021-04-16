@@ -4,6 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	"github.com/lvxin0315/gg-framework/config"
+	"github.com/lvxin0315/gg-framework/log"
 )
 
 type FuncWithSqliteGormDB func(gormDB *gorm.DB) error
@@ -20,9 +21,13 @@ type SqliteDB struct {
 	gormDB *gorm.DB
 }
 
-func NewSqliteDB(config *config.SqliteConfig) *SqliteDB {
+func NewSqliteDB(config *config.SqliteConfig, logger *log.L) *SqliteDB {
 	sqliteDB := new(SqliteDB)
 	sqliteDB.init(config)
+	//设置log
+	if logger != nil {
+		sqliteDB.gormDB.SetLogger(logger)
+	}
 	return sqliteDB
 }
 

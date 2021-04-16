@@ -5,7 +5,9 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/lvxin0315/gg-framework/config"
 	"github.com/lvxin0315/gg-framework/core"
+	"github.com/lvxin0315/gg-framework/log"
 	"github.com/lvxin0315/gg-framework/model"
+	"github.com/sirupsen/logrus"
 	"testing"
 )
 
@@ -17,6 +19,14 @@ type TestMysqlModel struct {
 }
 
 func TestNewMysqlDB(t *testing.T) {
+	logConfig := config.LogConfig{
+		Level:    logrus.DebugLevel,
+		Filename: "Debug.log",
+		MaxSize:  300,
+		MaxAge:   30,
+	}
+	l := log.NewLog(logConfig)
+
 	config := config.MysqlConfig{
 		Host:     "127.0.0.1",
 		User:     "root",
@@ -26,7 +36,7 @@ func TestNewMysqlDB(t *testing.T) {
 		Debug:    true,
 		Charset:  "utf8mb4",
 	}
-	mysqlDB := core.NewMysqlDB(&config)
+	mysqlDB := core.NewMysqlDB(&config, l)
 
 	_ = mysqlDB.Exec(func(gormDB *gorm.DB) error {
 		gormDB.AutoMigrate(TestMysqlModel{})
