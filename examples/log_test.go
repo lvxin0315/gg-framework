@@ -17,9 +17,13 @@ func TestLog(t *testing.T) {
 	l := log.NewLog(logConfig)
 	_test(l)
 	l.Info("hi,", " wl Info")
-
 }
 
 func _test(l *log.L) {
 	l.Error("hi,", " wl Error")
+}
+
+func TestLog1(t *testing.T) {
+	log.InitLog()
+	log.Info("test1 ", "hi,", " wl Info")
 }
