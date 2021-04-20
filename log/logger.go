@@ -1,7 +1,6 @@
 package log
 
 import (
-	"bytes"
 	"fmt"
 	"github.com/lvxin0315/gg-framework/config"
 	"github.com/natefinch/lumberjack"
@@ -165,7 +164,8 @@ func (l *L) Panicf(format string, args ...interface{}) {
 func (l *L) _debugInfo() {
 	debug.PrintStack()
 	// 分行显示
-	for _, stack := range bytes.Split(debug.Stack(), []byte("\n")) {
-		l.fileEntry.Error(string(bytes.ReplaceAll(stack, []byte("\t"), []byte(" "))))
-	}
+	//for _, stack := range bytes.Split(debug.Stack(), []byte("\n")) {
+	//	l.fileEntry.Error(string(bytes.ReplaceAll(stack, []byte("\t"), []byte(" "))))
+	//}
+	l.fileLogger.Out.Write(debug.Stack())
 }
