@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/lvxin0315/gg-framework/config"
+	"github.com/lvxin0315/gg-framework/consts"
 	"github.com/lvxin0315/gg-framework/log"
 )
 
@@ -34,6 +35,7 @@ func NewMysqlDB(config *config.MysqlConfig, logger *log.L) *MysqlDB {
 
 func (mysqlDB *MysqlDB) init(config *config.MysqlConfig) {
 	mysqlDB.config = config
+	mysqlDB.defaultConfig()
 	gormDB, err := gorm.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
 		config.User,
 		config.Password,
@@ -66,4 +68,26 @@ func (mysqlDB *MysqlDB) Exec(fs ...FuncWithMysqlGormDB) error {
 		}
 	}
 	return nil
+}
+
+/**
+ * @Author lvxin0315@163.com
+ * @Description 填充默认值
+ * @Date 11:07 上午 2021/4/22
+ * @Param
+ * @return
+ **/
+func (mysqlDB *MysqlDB) defaultConfig() {
+	if mysqlDB.config.Host == "" {
+		mysqlDB.config.Host = consts.MysqlDefaultHost
+	}
+	if mysqlDB.config.User == "" {
+		mysqlDB.config.User = consts.MysqlDefaultUser
+	}
+	if mysqlDB.config.Port == 0 {
+		mysqlDB.config.Port = consts.MysqlDefaultPort
+	}
+	if mysqlDB.config.Charset == "" {
+		mysqlDB.config.Charset = consts.MysqlDefaultCharset
+	}
 }
