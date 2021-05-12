@@ -12,7 +12,7 @@
 - 捕获error的封装
 - 协程池化封装
 - 支持多种操作的cache
-- 基础gin crud的代码「脚手架」
+- 基础gin curd的代码「脚手架」
 - excel 相关业务（结构体 to 文件）的封装
 - 基于gin middleware 的 jwt 处理
 - 基于gin middleware 的 csrf 处理
